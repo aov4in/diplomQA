@@ -1,9 +1,18 @@
+node_modules
+target
+
+*.ibt
+binlog.*
+data_mysql/
+
+*.log
+.allure/
+
 Thumbs.db*
-.DS_Store*
-HELP.md
+.DS_Store
+
 .gradle
 build/
-target/
 
 ### STS ###
 .apt_generated
@@ -42,6 +51,5 @@ out/
 
 ### Exclusions ###
 !gradle/wrapper/gradle-wrapper.jar
-!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
