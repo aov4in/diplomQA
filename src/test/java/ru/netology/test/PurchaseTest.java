@@ -33,7 +33,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения ошибки некорректного формата ввода в меню купить")
+    @DisplayName("Checking the display of an incorrect input format error in the buy menu")
     void shouldReturnIncorrectFormatError() {
         countBefore = SqlUtils.countPayment();
         open(link);
@@ -45,7 +45,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения ошибки некорректного формата ввода в меню купить в кредит")
+    @DisplayName("Checking the display of an incorrect input format error in the buy on credit menu")
     void shouldReturnIncorrectFormatError_credit() {
         countBefore = SqlUtils.countCredit();
         open(link);
@@ -57,7 +57,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения подтверждения в проведении операции в меню купить")
+    @DisplayName("Checking the display of confirmation in the operation in the buy menu")
     void shouldReturnSuccessNotification() {
         countBefore = SqlUtils.countApprovedPayment();
         open(link);
@@ -72,7 +72,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения отказа в проведении операции в меню купить")
+    @DisplayName("Checking the display of a refusal to carry out an operation in the buy menu")
     void shouldReturnErrorNotification() {
         countBefore = SqlUtils.countDeclinedPayment();
         open(link);
@@ -87,7 +87,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения отказа в проведении операции со случайной картой в меню купить")
+    @DisplayName("Checking the display of refusal to carry out an operation with a random card in the buy menu")
     void shouldReturnErrorNotification_randomCard() {
         countBefore = SqlUtils.countDeclinedPayment();
         open(link);
@@ -102,7 +102,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения ошибки валидности полей в меню купить")
+    @DisplayName("Checking the display of the field validity error in the buy menu")
     void shouldReturnErrorValidity() {
         countBefore = SqlUtils.countPayment();
         open(link);
@@ -117,7 +117,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения подтверждения в проведении операции в меню купить в кредит")
+    @DisplayName("Checking the display of confirmation in the operation in the buy on credit menu")
     void shouldReturnSuccessNotification_credit() {
         countBefore = SqlUtils.countApprovedCredit();
         open(link);
@@ -132,7 +132,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения отказа в проведении операции в меню купить в кредит")
+    @DisplayName("Checking the display of a refusal to carry out an operation in the buy on credit menu")
     void shouldReturnErrorNotification_credit() {
         countBefore = SqlUtils.countDeclinedCredit();
         open(link);
@@ -147,7 +147,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения отказа в проведении операции со случайной картой в меню купить в кредит")
+    @DisplayName("Checking the display of refusal to carry out an operation with a random card in the buy on credit menu")
     void shouldReturnErrorNotification_randomCard_credit(){
         countBefore = SqlUtils.countDeclinedCredit();
         open(link);
@@ -162,7 +162,7 @@ public class PurchaseTest {
     }
 
     @Test
-    @DisplayName("Проверка отображения ошибки валидности полей в меню купить в кредит")
+    @DisplayName("Checking the display of the field validity error in the buy on credit menu")
     void shouldReturnErrorValidity_credit(){
         countBefore = SqlUtils.countCredit();
         open(link);
