@@ -2,178 +2,252 @@ package ru.netology.test;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
+import lombok.val;
 import org.junit.jupiter.api.*;
+import ru.netology.data.Data;
+import ru.netology.data.SqlUtils;
+import ru.netology.pages.Page;
+
+import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PurchaseTest {
-
-    private static String link;
-    private int countBefore;
-    private int countAfter;
-    private static Page elements;
-    private static Data.MonthAndYear monthAndYear;
-    private static Data.ListCards listCards;
-
+    /*DBTests*/
     @BeforeAll
-    static void init() {
-        SqlUtils.dbConnect();
-        link = System.getProperty("url");
-        elements = new Page();
-        monthAndYear = Data.getMonthAndYear();
-        listCards = Data.getListCards();
+    static void setUpAll() {
+
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
     @AfterAll
-    static void close() {
-        SqlUtils.dbCloseConnect();
+    static void tearDownAll() throws SQLException {
         SelenideLogger.removeListener("allure");
+        SqlUtils.cleanDB();
+    }
+    
+
+    @BeforeEach
+    public void openSource() {
+
+        open("http://localhost:8080");
     }
 
     @Test
-    @DisplayName("Checking the display of an incorrect input format error in the buy menu")
-    void shouldReturnIncorrectFormatError() {
-        countBefore = SqlUtils.countPayment();
-        open(link);
-        elements.buyButtonClick()
-                .continueButtonClick()
-                .allFieldsVisible();
-        countAfter = SqlUtils.countPayment();
-        assertEquals(countBefore, countAfter);
+    @DisplayName("Payment card info can be sent and saved by database")
+    void paymentCardInfoCanBeSentAndSavedByDatabase () throws SQLException {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getCardInfoSample();
+        debitCard.fillForm(cardInfo);
+        mainPage.errorTransaction();
+        assertEquals(SqlUtils.getCreatedOrderStatus(), SqlUtils.getCreatedPaymentStatus());
     }
 
     @Test
-    @DisplayName("Checking the display of an incorrect input format error in the buy on credit menu")
-    void shouldReturnIncorrectFormatError_credit() {
-        countBefore = SqlUtils.countCredit();
-        open(link);
-        elements.buyButtonClick()
-                .continueButtonClick()
-                .allFieldsVisible();
-        countAfter = SqlUtils.countCredit();
-        assertEquals(countBefore, countAfter);
+    @DisplayName("Credit card info can be sent and saved by database")
+    void creditCardInfoCanBeSentAndSavedByDatabase () throws SQLException {
+        val mainPage = new Page();
+        val creditCard = mainPage.requestCredit();
+        val cardInfo = Data.getCardInfoSample();
+        creditCard.fillForm(cardInfo);
+        mainPage.errorTransaction();
+        assertEquals(SqlUtils.getCreatedOrderStatus(), SqlUtils.getCreatedRequestStatus());
     }
 
     @Test
-    @DisplayName("Checking the display of confirmation in the operation in the buy menu")
-    void shouldReturnSuccessNotification() {
-        countBefore = SqlUtils.countApprovedPayment();
-        open(link);
-        elements.buyButtonClick()
-                .cardOneInput(listCards)
-                .validMonthAndYearInput(monthAndYear)
-                .fakerNameAndCvcInput()
-                .continueButtonClick()
-                .successNotificationVisible();
-        countAfter = SqlUtils.countApprovedPayment();
-        assertEquals(countBefore+1, countAfter);
+    @DisplayName("Payment with first given card should be approved and saved by database")
+    void paymentWithFirstGivenCardShouldBeApprovedAndSavedByDatabase () throws SQLException {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getFirstGivenCard();
+        debitCard.fillForm(cardInfo);
+        mainPage.successfullyTransaction();
+        assertEquals(Data.successStatus, SqlUtils.getPaymentStatus());
     }
 
     @Test
-    @DisplayName("Checking the display of a refusal to carry out an operation in the buy menu")
-    void shouldReturnErrorNotification() {
-        countBefore = SqlUtils.countDeclinedPayment();
-        open(link);
-        elements.buyButtonClick()
-                .cardTwoInput(listCards)
-                .validMonthAndYearInput(monthAndYear)
-                .fakerNameAndCvcInput()
-                .continueButtonClick()
-                .errorNotificationVisible();
-        countAfter = SqlUtils.countDeclinedPayment();
-        assertEquals(countBefore+1, countAfter);
+    @DisplayName("Payment with second given card should be declined and saved by database")
+    void paymentWithSecondGivenCardShouldBeDeclinedAndSavedByDatabase () throws SQLException {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getSecondGivenCard();
+        debitCard.fillForm(cardInfo);
+        mainPage.errorTransaction();
+        assertEquals(Data.errorStatus, SqlUtils.getPaymentStatus());
     }
 
     @Test
-    @DisplayName("Checking the display of refusal to carry out an operation with a random card in the buy menu")
-    void shouldReturnErrorNotification_randomCard() {
-        countBefore = SqlUtils.countDeclinedPayment();
-        open(link);
-        elements.buyButtonClick()
-                .fakerCardInput()
-                .validMonthAndYearInput(monthAndYear)
-                .fakerNameAndCvcInput()
-                .continueButtonClick()
-                .errorNotificationVisible();
-        countAfter = SqlUtils.countDeclinedPayment();
-        assertEquals(countBefore+1, countAfter);
+    @DisplayName("Credit request with first given card should be approved and saved by database")
+    void creditRequestWithFirstGivenCardShouldBeApprovedAndSavedByDatabase () throws SQLException {
+        val mainPage = new Page();
+        val creditCard = mainPage.requestCredit();
+        val cardInfo = Data.getFirstGivenCard();
+        creditCard.fillForm(cardInfo);
+        mainPage.successfullyTransaction();
+        assertEquals(Data.successStatus, SqlUtils.getRequestStatus());
     }
 
     @Test
-    @DisplayName("Checking the display of the field validity error in the buy menu")
-    void shouldReturnErrorValidity() {
-        countBefore = SqlUtils.countPayment();
-        open(link);
-        elements.buyButtonClick()
-                .cardTwoInput(listCards)
-                .invalidMonthAndYearInput(monthAndYear)
-                .fakerNameAndCvcInput()
-                .continueButtonClick()
-                .monthAndYearError();
-        countAfter = SqlUtils.countPayment();
-        assertEquals(countBefore, countAfter);
+    @DisplayName("Credit request with second given card should be declined and saved by database")
+    void creditRequestWithSecondGivenCardShouldBeDeclinedAndSavedByDatabase () throws SQLException {
+        val mainPage = new Page();
+        val creditCard = mainPage.requestCredit();
+        val cardInfo = Data.getSecondGivenCard();
+        creditCard.fillForm(cardInfo);
+        mainPage.errorTransaction();
+        assertEquals(Data.errorStatus, SqlUtils.getRequestStatus());
+        mainPage.errorTransaction();
+    }
+
+    /*PageTest*/
+    
+    @Test
+    @DisplayName("Should show error message if card filled with characters")
+    void shouldShowErrorMessageIfCardFilledWithCharacters () {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getCharactersInsteadOfCardNumber();
+        debitCard.fillForm(cardInfo);
+        debitCard.cardNumberErrorCheck();
     }
 
     @Test
-    @DisplayName("Checking the display of confirmation in the operation in the buy on credit menu")
-    void shouldReturnSuccessNotification_credit() {
-        countBefore = SqlUtils.countApprovedCredit();
-        open(link);
-        elements.creditBuyButtonClick()
-                .cardOneInput(listCards)
-                .validMonthAndYearInput(monthAndYear)
-                .fakerNameAndCvcInput()
-                .continueButtonClick()
-                .successNotificationVisible();
-        countAfter = SqlUtils.countApprovedCredit();
-        assertEquals(countBefore+1, countAfter);
+    @DisplayName("Should show error message if card filled with short number")
+    void shouldShowErrorMessageIfCardFilledWithShortNumber() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getCardWithShortNumber();
+        debitCard.fillForm(cardInfo);
+        debitCard.cardNumberErrorCheck();
     }
 
     @Test
-    @DisplayName("Checking the display of a refusal to carry out an operation in the buy on credit menu")
-    void shouldReturnErrorNotification_credit() {
-        countBefore = SqlUtils.countDeclinedCredit();
-        open(link);
-        elements.creditBuyButtonClick()
-                .cardTwoInput(listCards)
-                .validMonthAndYearInput(monthAndYear)
-                .fakerNameAndCvcInput()
-                .continueButtonClick()
-                .errorNotificationVisible();
-        countAfter = SqlUtils.countDeclinedCredit();
-        assertEquals(countBefore+1, countAfter);
+    @DisplayName("Should show error message if card filled with symbols")
+    void shouldShowErrorMessageIfCardFilledWithSymbols() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getSymbolsInsteadOfCardNumber();
+        debitCard.fillForm(cardInfo);
+        debitCard.cardNumberErrorCheck();
     }
 
     @Test
-    @DisplayName("Checking the display of refusal to carry out an operation with a random card in the buy on credit menu")
-    void shouldReturnErrorNotification_randomCard_credit(){
-        countBefore = SqlUtils.countDeclinedCredit();
-        open(link);
-        elements.creditBuyButtonClick()
-                .fakerCardInput()
-                .validMonthAndYearInput(monthAndYear)
-                .fakerNameAndCvcInput()
-                .continueButtonClick()
-                .errorNotificationVisible();
-        countAfter = SqlUtils.countDeclinedCredit();
-        assertEquals(countBefore+1, countAfter);
+    @DisplayName("Should show error message if card is expired")
+    void shouldShowErrorMessageIfCardIsExpired() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getExpiredCardInfo();
+        debitCard.fillForm(cardInfo);
+        debitCard.cardDateErrorCheck();
     }
 
     @Test
-    @DisplayName("Checking the display of the field validity error in the buy on credit menu")
-    void shouldReturnErrorValidity_credit(){
-        countBefore = SqlUtils.countCredit();
-        open(link);
-        elements.creditBuyButtonClick()
-                .cardTwoInput(listCards)
-                .invalidMonthAndYearInput(monthAndYear)
-                .fakerNameAndCvcInput()
-                .continueButtonClick()
-                .monthAndYearError();
-        countAfter = SqlUtils.countCredit();
-        assertEquals(countBefore, countAfter);
+    @DisplayName("Should show error message if owner filled only with first name")
+    void shouldShowErrorMessageIfOwnerFilledOnlyWithFirstName() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getOnlyOwnerName();
+        debitCard.fillForm(cardInfo);
+        debitCard.ownerErrorCheck();
     }
+
+    @Test
+    @DisplayName("Should show error message if owner filled with name in russian")
+    void shouldShowErrorMessageIfOwnerFilledWithNameInRussian() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getRussianOwnerName();
+        debitCard.fillForm(cardInfo);
+        debitCard.ownerErrorCheck();
+    }
+
+    @Test
+    @DisplayName("Should show error message if owner filled with number")
+    void shouldShowErrorMessageIfOwnerFilledWithNumber() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getNumberInsteadOfName();
+        debitCard.fillForm(cardInfo);
+        debitCard.ownerErrorCheck();
+    }
+
+    @Test
+    @DisplayName("Should show error message if owner filled with symbols")
+    void shouldShowErrorMessageIfOwnerFilledWithSymbols() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getSymbolsInsteadOfName();
+        debitCard.fillForm(cardInfo);
+        debitCard.ownerErrorCheck();
+    }
+
+    @Test
+    @DisplayName("Should show error message if owner filled with random characters")
+    void shouldShowErrorMessageIfOwnerFilledWithRandomCharacters() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getRandomCharactersInsteadOfName();
+        debitCard.fillForm(cardInfo);
+        debitCard.ownerErrorCheck();
+    }
+
+    @Test
+    @DisplayName("Should show error message if CVV filled with symbols")
+    void shouldShowErrorMessageIfCVVFilledWithSymbols() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getSymbolsInsteadOfCVV();
+        debitCard.fillForm(cardInfo);
+        debitCard.CVVErrorCheck();
+    }
+
+    @Test
+    @DisplayName("Should show error message if CVV filled with characters")
+    void shouldShowErrorMessageIfCVVFilledWithCharacters() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getCharactersInsteadOfCVV();
+        debitCard.fillForm(cardInfo);
+        debitCard.CVVErrorCheck();
+    }
+
+    @Test
+    @DisplayName("CVV field should not accept more than three digits")
+    void CVVFieldShouldNotAcceptMoreThanThreeDigits() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getCVVLongerThanThree();
+        debitCard.fillForm(cardInfo);
+        debitCard.shouldGetThreeDigits();
+    }
+
+    @Test
+    @DisplayName("Should show error message if CVV filled with 2 digits")
+    void shouldShowErrorMessageIfCVVFilledWith2Digits() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        val cardInfo = Data.getCVVShorterThanThree();
+        debitCard.fillForm(cardInfo);
+        debitCard.CVVErrorCheck();
+    }
+
+    @Test
+    @DisplayName("Should show error messages if empty payment form sent")
+    void shouldShowErrorMessageIfEmptyPaymentFormSent() {
+        val mainPage = new Page();
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.sendEmptyForm();
+    }
+
+    @Test
+    @DisplayName("Should show error messages if empty credit request form sent")
+    void shouldShowErrorMessageIfEmptyCreditRequestFormSent() {
+        val mainPage = new Page();
+        val creditCard = mainPage.requestCredit();
+        creditCard.sendEmptyForm();
+    }
+
 
 }

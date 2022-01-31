@@ -1,16 +1,6 @@
-node_modules
-target
-
-*.ibt
-binlog.*
-data_mysql/
-
-*.log
-.allure/
-
 Thumbs.db*
 .DS_Store
-
+HELP.md
 .gradle
 build/
 
@@ -53,4 +43,3 @@ out/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
-/data_mysql

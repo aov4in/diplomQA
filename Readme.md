@@ -20,7 +20,8 @@
 
 4. Запустить контейнеры командой `docker-compose up -d`
 
-5. Запустить SUT контейнер в отдельном окне терминала. При тестировании на mysql командой `java -jar ./artifacts/aqa-shop.jar --spring.profiles.active=mysql`
+5. Запустить SUT контейнер в отдельном окне терминала. 
+   При тестировании на mysql командой `java -jar ./artifacts/aqa-shop.jar --spring.profiles.active=mysql`
 При тестировании на postgres командой `java -jar ./artifacts/aqa-shop.jar --spring.profiles.active=postgres`
 
 6. В третьем окне терминала запустить тесты. 

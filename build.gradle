@@ -1,13 +1,14 @@
 plugins {
     id 'java'
-    id 'io.qameta.allure' version '2.8.1'
+    id "io.qameta.allure" version "2.9.6"
 }
-// apply plugin: 'io.qameta.allure'
+
+apply plugin: 'io.qameta.allure'
 
 group 'ru.netology'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 allure {
     autoconfigure = true
@@ -18,6 +19,7 @@ allure {
 }
 
 repositories {
+    //jcenter()
     mavenCentral()
 }
 
@@ -25,19 +27,20 @@ compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
 dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+    testImplementation 'mysql:mysql-connector-java:8.0.18'
+    testImplementation 'org.postgresql:postgresql:42.2.9'
+    testImplementation 'com.github.javafaker:javafaker:1.0.1'
+    testImplementation 'commons-dbutils:commons-dbutils:1.7'
+    compile 'commons-io:commons-io:2.6'
+
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.20'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
-
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'com.codeborne:selenide:5.24.0'
-    testImplementation 'commons-dbutils:commons-dbutils:1.7'
-    testImplementation 'com.github.javafaker:javafaker:1.0.1'
-    testImplementation 'mysql:mysql-connector-java:8.0.18'
-    testImplementation 'org.postgresql:postgresql:42.2.9'
+
     // https://mvnrepository.com/artifact/io.qameta.allure/allure-junit5
     testImplementation 'io.qameta.allure:allure-junit5:2.14.0'
     runtimeOnly 'io.qameta.allure:allure-generator:2.14.0'
@@ -49,9 +52,9 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    systemProperty 'dbUrl', System.getProperty('dbUrl', 'jdbc:mysql://localhost:3306/app')
-    systemProperty 'user', System.getProperty('user', 'app')
-    systemProperty 'pass', System.getProperty('pass', 'pass')
-    systemProperty 'url', System.getProperty('url', 'http://localhost:8080')
-    systemProperty 'selenide.headless', System.getProperty('selenide.headless', 'true')
+    systemProperty 'db.url', System.getProperty('db.url')
+    systemProperty 'db.user', System.getProperty('db.user', 'app')
+    systemProperty 'db.password', System.getProperty('db.password', 'pass')
+    systemProperty 'sut.url', System.getProperty('sut.url', 'localhost:8080')
+    systemProperty 'selenide.headless', System.getProperty('selenide.headless')
 }
