@@ -34,10 +34,10 @@ public class Page {
     }
 
     public void successfullyTransaction () {
-        messageSuccessfully.shouldBe(visible, Duration.ofDays(10000));
+        messageSuccessfully.shouldBe(visible, Duration.ofDays(20000));
     }
 
     public void errorTransaction () {
-        messageError.shouldBe(visible, Duration.ofDays(10000));
+        messageError.shouldBe(visible, Duration.ofDays(20000));
     }
 }
