@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-
+    id "io.freefair.lombok" version "5.2.1"
     id "io.qameta.allure" version "2.9.6"
 }
 
@@ -29,31 +29,19 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'mysql:mysql-connector-java:8.0.18'
     testImplementation 'org.postgresql:postgresql:42.2.9'
-    testImplementation 'com.github.javafaker:javafaker:1.0.1'
+    testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
-    compile 'commons-io:commons-io:2.6'
-
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
-
-    testCompileOnly 'org.projectlombok:lombok:1.18.20'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
-    testImplementation 'com.codeborne:selenide:5.24.0'
-
-    // https://mvnrepository.com/artifact/io.qameta.allure/allure-junit5
-    testImplementation 'io.qameta.allure:allure-junit5:2.14.0'
-    runtimeOnly 'io.qameta.allure:allure-generator:2.14.0'
-    // https://mvnrepository.com/artifact/io.qameta.allure/allure-selenide
-    implementation 'io.qameta.allure:allure-selenide:2.14.0'
-
-
+    testImplementation 'com.google.code.gson:gson:2.8.6'
+    testImplementation 'io.rest-assured:rest-assured:4.3.0'
+    testImplementation 'com.codeborne:selenide:5.3.1'
+    testImplementation 'io.qameta.allure:allure-selenide:2.14.0'
 }
 
 test {
     useJUnitPlatform()
-    systemProperty 'db.url', System.getProperty('db.url', 'jdbc:mysql://localhost:3306/app')
+    systemProperty 'db.url', System.getProperty('db.url')
     systemProperty 'user', System.getProperty('user', 'app')
     systemProperty 'password', System.getProperty('password', 'pass')
     systemProperty 'sut.url', System.getProperty('sut.url', 'http://localhost:8080')
-    systemProperty 'selenide.headless', System.getProperty('selenide.headless', 'true')
+    systemProperty 'selenide.headless', System.getProperty('selenide.headless')
 }
