@@ -4,40 +4,28 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
-import java.time.Duration;
-
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selectors.withText;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 public class Page {
-    private final SelenideElement buyButton = $(byText("Купить"));
-    private final SelenideElement creditBuyButton = $(byText("Купить в кредит"));
-    private final SelenideElement paymentFormName = $(byText("Оплата по карте"));
-    private final SelenideElement creditFormName = $(byText("Кредит по данным карты"));
-    private final SelenideElement messageError = $(withText("Ошибка"));
-    private final SelenideElement messageSuccessfully = $(withText("Успешно"));
+    private SelenideElement heading = $$("h2").find(Condition.text("Путешествие дня"));
+    private SelenideElement buyButton = $$("button").find(exactText("Купить"));
+    private SelenideElement creditBuyButton = $$("button").find(exactText("Купить в кредит"));
 
     @Step("Нажать кнопку 'Купить'")
-    public PageCards payWithDebitCard () {
-        buyButton.click();
-        paymentFormName.shouldBe(visible);
-        return new PageCards ();
+    public PageDebitCards payWithDebitCard () {
+        buyButton.shouldBe(visible);
+        return new PageDebitCards();
     }
 
     @Step("Нажать кнопку 'Купить в кредит'")
-    public PageCards requestCredit () {
-        creditBuyButton.click();
-        creditFormName.shouldBe(visible);
-        return new PageCards();
+    public PageCreditCards requestCredit() {
+        creditBuyButton.shouldBe(visible);
+        return new PageCreditCards();
     }
-
-    public void successfullyTransaction () {
-        messageSuccessfully.shouldBe(visible, Duration.ofDays(20000));
-    }
-
-    public void errorTransaction () {
-        messageError.shouldBe(visible, Duration.ofDays(20000));
+    @Step("Путешествие дня")
+    public void startPage () {
+        heading.shouldBe(visible);
     }
 }

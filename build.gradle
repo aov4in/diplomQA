@@ -1,9 +1,8 @@
 plugins {
     id 'java'
+
     id "io.qameta.allure" version "2.9.6"
 }
-
-apply plugin: 'io.qameta.allure'
 
 group 'ru.netology'
 version '1.0-SNAPSHOT'
@@ -19,7 +18,7 @@ allure {
 }
 
 repositories {
-    //jcenter()
+    jcenter()
     mavenCentral()
 }
 
@@ -55,5 +54,6 @@ test {
     systemProperty 'db.url', System.getProperty('db.url', 'jdbc:mysql://localhost:3306/app')
     systemProperty 'user', System.getProperty('user', 'app')
     systemProperty 'password', System.getProperty('password', 'pass')
+    systemProperty 'sut.url', System.getProperty('sut.url', 'http://localhost:8080')
     systemProperty 'selenide.headless', System.getProperty('selenide.headless', 'true')
 }
