@@ -13,19 +13,19 @@ public class Page {
     private SelenideElement buyButton = $$("button").find(exactText("Купить"));
     private SelenideElement creditBuyButton = $$("button").find(exactText("Купить в кредит"));
 
+    public Page () {
+        heading.shouldBe(visible);
+    }
+
     @Step("Нажать кнопку 'Купить'")
     public PageDebitCards payWithDebitCard () {
-        buyButton.shouldBe(visible);
+        buyButton.click();
         return new PageDebitCards();
     }
 
     @Step("Нажать кнопку 'Купить в кредит'")
     public PageCreditCards requestCredit() {
-        creditBuyButton.shouldBe(visible);
+        creditBuyButton.click();
         return new PageCreditCards();
-    }
-    @Step("Путешествие дня")
-    public void startPage () {
-        heading.shouldBe(visible);
     }
 }

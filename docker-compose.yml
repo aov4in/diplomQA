@@ -1,26 +1,37 @@
 version: '3.2'
 services:
-  mysql:
+  d_mysql:
     image: mysql:8.0.18
-    restart: always
     ports:
       - 3306:3306
+    volumes:
+      - ./data_mysql:/var/lib/mysql
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_DATABASE=app
       - MYSQL_USER=app
       - MYSQL_PASSWORD=pass
-  postgres:
+  d_postgres:
     image: postgres:12.1
-    restart: always
     ports:
       - 5432:5432
+    volumes:
+      - data_postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=app
       - POSTGRES_USER=app
       - POSTGRES_PASSWORD=pass
   node:
-    build: gate-simulator
-    image: 'node'
+    image: "node"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./gate-simulator:/home/node/app
     ports:
       - 9999:9999
+    command: "npm start"
+volumes:
+  data_postgres:
+    driver: local

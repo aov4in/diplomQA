@@ -6,6 +6,8 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.*;
 
+import static java.sql.DriverManager.getConnection;
+
 public class SqlUtils {
     static String url = getUrl();
     static String user = getUser();
@@ -28,7 +30,7 @@ public class SqlUtils {
         String data = "";
         val runner = new QueryRunner();
         try (
-                val conn = DriverManager.getConnection(url, user, password)) {
+                val conn = getConnection(url, user, password)) {
             data = runner.query(conn, query, new ScalarHandler<>());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,7 +48,7 @@ public class SqlUtils {
         Long count = null;
         val statusSQL = "SELECT count(*) FROM order_entity;";
         val runner = new     QueryRunner();
-        try (val conn = DriverManager.getConnection(url, user, password)) {
+        try (val conn = getConnection(url, user, password)) {
             count = runner.query(conn, statusSQL, new ScalarHandler<>());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,7 +66,7 @@ public class SqlUtils {
         val runner = new QueryRunner();
 
         try (
-                val conn = DriverManager.getConnection(
+                val conn = getConnection(
                         url, user, password
                 );
         ) {

@@ -18,7 +18,7 @@ public class PageCreditCards {
     private final SelenideElement cardOwnerField = $(byText("Владелец")).parent().$(".input__control");
     private final SelenideElement cardCVVField = $(byText("CVC/CVV")).parent().$(".input__control");
     private final SelenideElement approvedOperation = $$("[class=\"notification__content\"]").find(text("Операция одобрена Банком."));
-    private final SelenideElement errorOperation = $$("[class=\"notification__content\"]").find(text("Ошибка! Банк отказал в проведении операции."));
+    private final SelenideElement errorOperation = $$("[class=\"notification__content\"]").findBy(text("Ошибка! Банк отказал в проведении операции."));
     private final SelenideElement wrongFormatError = $(byText("Неверный формат"));
     private final ElementsCollection wrongFormatFourError = $$(byText("Неверный формат"));
     private final SelenideElement validityError = $(byText("Неверно указан срок действия карты"));
@@ -39,7 +39,7 @@ public class PageCreditCards {
         continueButton.click();
     }
     public void approvedOperationBank () {
-        approvedOperation.waitUntil(visible, 10000);
+        approvedOperation.waitUntil(visible, 25000);
         cancelSuccessField.click();
     }
     public void refusedOperationBank () {

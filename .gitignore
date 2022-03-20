@@ -3,6 +3,13 @@ Thumbs.db*
 HELP.md
 .gradle
 build/
+node_modules
+target
+*.ibt
+binlog.*
+.data_mysql/
+*.log
+.allure/
 
 ### STS ###
 .apt_generated

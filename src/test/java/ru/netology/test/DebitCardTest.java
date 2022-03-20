@@ -33,6 +33,7 @@ public class DebitCardTest {
         open(url);
     }
 
+    //"Валидные данные карты"
     @Test
     @DisplayName("DebitCard. The operation was successful, a record appeared with the status APPROVED")
     void shouldDebitCarddebitCardApproved () {
@@ -40,9 +41,10 @@ public class DebitCardTest {
         val debitCard = mainPage.payWithDebitCard();
         debitCard.fillData(Data.getValidCard());
         debitCard.approvedOperationBank();
-        assertEquals("APPROVED", SqlUtils.getRequestStatus());
+        assertEquals("APPROVED", SqlUtils.getPaymentStatus());
     }
 
+    //"Не валидные данные карты"
     @Test
     @DisplayName("DebitCard. The operation was successful, a record appeared with the status DECLINED")
     void shouldDebitCarddebitCardDeclined () {
@@ -53,6 +55,7 @@ public class DebitCardTest {
         assertEquals("DECLINED", SqlUtils.getRequestStatus());
     }
 
+    // "Несуществующая карта"
     @Test
     @DisplayName("DebitCard. Purchase with an invalid card. The operation was rejected by the bank. Missing entry in database")
     void payingWithNonExistingCreditCard () {
@@ -63,6 +66,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Недействительная карта"
     @Test
     @DisplayName("DebitCard. Invalid credit card format. No entry in database")
     void shouldInvalidCreditCardFormat() {
@@ -73,6 +77,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Неверно указан срок действия карты. Не верно указан месяц"
     @Test
     @DisplayName("DebitCard. Invalid card expiration date. One month has expired. No entry in database")
     void shouldCreditCardInvalidDateMonth() {
@@ -83,6 +88,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Истёк срок действия карты. Не верно указан год"
     @Test
     @DisplayName("DebitCard. Invalid card expiration date. One year has expired. No entry in database")
     void shouldCreditCardInvalidDateYear() {
@@ -93,6 +99,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Истёк срок действия карты. Больше года"
     @Test
     @DisplayName("DebitCard. Invalid card expiration date. The card is valid for more than 5 years. No entry in database")
     void shouldCreditCardExceedYear() {
@@ -103,6 +110,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Не указан номер карты"
     @Test
     @DisplayName("DebitCard. The card number field is not filled. Required field. No entry in database")
     void shouldCreditCardEmptyNumber() {
@@ -113,6 +121,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Указан нулевой месяц"
     @Test
     @DisplayName("DebitCard. Value \"00\" in the month field. Invalid format. No entry in database")
     void shouldCreditCardNullMonthValue() {
@@ -123,6 +132,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Указан не корректный месяц"
     @Test
     @DisplayName("DebitCard. Not a valid month value. Invalid format. No entry in database")
     void shouldCreditCardNotExistedMonth() {
@@ -133,6 +143,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Не заполнены данные карты"
     @Test
     @DisplayName("DebitCard. Purchase by credit card with empty fields. \"Invalid Format\" and \"Required Field\" Error Messages. No entry in database")
     void shouldCreditCardEmptyField() {
@@ -143,6 +154,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Поле Владелец заполнено на русском"
     @Test
     @DisplayName("DebitCard. Invalid format, the Owner field is filled in Cyrillic. No entry in database")
     void shouldCreditCardRusNameOwner() {
@@ -153,6 +165,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Не корректно заполнено поле Владелец"
     @Test
     @DisplayName("DebitCard. The Owner field is filled with characters. Invalid format. No entry in database")
     void shouldCreditCardNotValidName() {
@@ -163,6 +176,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    // "Не корректно заполнено поле CVC/CVV"
     @Test
     @DisplayName("DebitCard. Not valid CVC / CVV values, Invalid format. No entry in database")
     void shouldCreditCardNotValidCVC() {
@@ -173,6 +187,7 @@ public class DebitCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
+    //"Срок действия карты менее одного года"
     @Test
     @DisplayName("DebitCard. Debit card expired")
     void shouldCreditCardExpired() {
