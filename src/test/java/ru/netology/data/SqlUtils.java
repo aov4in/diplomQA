@@ -40,7 +40,7 @@ public class SqlUtils {
 
     public static String getRequestStatus () {
 
-        val statusSQL = "SELECT status FROM credit_request_entity;";
+        val statusSQL = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
         return getData(statusSQL);
     }
 

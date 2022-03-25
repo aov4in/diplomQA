@@ -71,10 +71,10 @@ public class DebitCardTest {
     @DisplayName("DebitCard. Invalid credit card format. No entry in database")
     void shouldInvalidCreditCardFormat() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getNotValidCard());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getNotValidCard());
         debitCard.incorrectNotificationFormat();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        assertEquals("5", SqlUtils.getCreatedOrderStatus());
     }
 
     // "Неверно указан срок действия карты. Не верно указан месяц"
@@ -82,20 +82,20 @@ public class DebitCardTest {
     @DisplayName("DebitCard. Invalid card expiration date. One month has expired. No entry in database")
     void shouldCreditCardInvalidDateMonth() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getExpiredMonthCard());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getExpiredMonthCard());
         debitCard.notificationValidityErrorVisible();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        assertEquals("2", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Истёк срок действия карты. Не верно указан год"
+    // "Поле обязательно для заполнения. Не указан год"
     @Test
     @DisplayName("DebitCard. Invalid card expiration date. One year has expired. No entry in database")
     void shouldCreditCardInvalidDateYear() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getExpiredYearCard());
-        debitCard.notificationValidityErrorVisible();
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getExpiredYearCard());
+        debitCard.notificationRequiredFieldVisible();
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
@@ -104,87 +104,87 @@ public class DebitCardTest {
     @DisplayName("DebitCard. Invalid card expiration date. The card is valid for more than 5 years. No entry in database")
     void shouldCreditCardExceedYear() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getExceedYearCard());
-        debitCard.notificationValidityErrorVisible();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getExceedYearCard());
+        debitCard.notificationCardExpiredVisibleError();
+        assertEquals("5", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Не указан номер карты"
+    // "Поле обязательно для заполнения. Не указан номер карты"
     @Test
     @DisplayName("DebitCard. The card number field is not filled. Required field. No entry in database")
     void shouldCreditCardEmptyNumber() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getWithoutNumberCard());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getWithoutNumberCard());
         debitCard.notificationRequiredFieldVisible();
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Указан нулевой месяц"
+    // "Не верный формат. Указан нулевой месяц"
     @Test
     @DisplayName("DebitCard. Value \"00\" in the month field. Invalid format. No entry in database")
     void shouldCreditCardNullMonthValue() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getNullMonthCard());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getNullMonthCard());
         debitCard.incorrectNotificationFormat();
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Указан не корректный месяц"
+    // "Неверно указан срок действия карты. Указан не корректный месяц"
     @Test
     @DisplayName("DebitCard. Not a valid month value. Invalid format. No entry in database")
     void shouldCreditCardNotExistedMonth() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getIncorrectMonthCard());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getIncorrectMonthCard());
         debitCard.notificationValidityErrorVisible();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        assertEquals("5", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Не заполнены данные карты"
+    // "Поле обязательно для заполнения. Не заполнены данные карты"
     @Test
     @DisplayName("DebitCard. Purchase by credit card with empty fields. \"Invalid Format\" and \"Required Field\" Error Messages. No entry in database")
     void shouldCreditCardEmptyField() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getEmptyFieldCard());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getEmptyFieldCard());
         debitCard.notificationDisplayedInvalidFormat();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        assertEquals("5", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Поле Владелец заполнено на русском"
+    // "Не верный формат.Поле Владелец заполнено на русском"
     @Test
     @DisplayName("DebitCard. Invalid format, the Owner field is filled in Cyrillic. No entry in database")
     void shouldCreditCardRusNameOwner() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getRusNameOwnerCard());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getRusNameOwnerCard());
         debitCard.incorrectNotificationFormat();
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Не корректно заполнено поле Владелец"
+    // "Не верный формат. Не корректно заполнено поле Владелец"
     @Test
     @DisplayName("DebitCard. The Owner field is filled with characters. Invalid format. No entry in database")
     void shouldCreditCardNotValidName() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getNotValidName());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getNotValidName());
         debitCard.incorrectNotificationFormat();
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Не корректно заполнено поле CVC/CVV"
+    // "Не верный формат. Не корректно заполнено поле CVC/CVV"
     @Test
     @DisplayName("DebitCard. Not valid CVC / CVV values, Invalid format. No entry in database")
     void shouldCreditCardNotValidCVC() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getNotValidCVCCard());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getNotValidCVCCard());
         debitCard.incorrectNotificationFormat();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        assertEquals("5", SqlUtils.getCreatedOrderStatus());
     }
 
     //"Срок действия карты менее одного года"
@@ -192,9 +192,9 @@ public class DebitCardTest {
     @DisplayName("DebitCard. Debit card expired")
     void shouldCreditCardExpired() {
         val mainPage = new Page();
-        val debitCard = mainPage.requestCredit();
-        debitCard.fillForm(Data.getCardDateLessOneYear());
-        debitCard.notificationCardExpiredVisibleError();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        val debitCard = mainPage.payWithDebitCard();
+        debitCard.fillData(Data.getCardDateLessOneYear());
+        debitCard.approvedOperationBank();
+        assertEquals("2", SqlUtils.getCreatedOrderStatus());
     }
 }

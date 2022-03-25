@@ -9,6 +9,7 @@ public class Data {
         return new CardInfo("4444 4444 4444 4441", "12", "23", "IVAN PETROV", "321");
     }
 
+    //"Не валидные данные карты"
     public static CardInfo getDeclinedCard() {
         return new CardInfo("4444 4444 4444 4442", "12", "23", "IVAN PETROV", "321");
     }
@@ -28,17 +29,17 @@ public class Data {
         return new CardInfo("4444 4444 4444 4441", "13", "23", "IVAN PETROV", "321");
     }
 
-    // "Истёк срок действия карты. Не верно указан год"
+    // "Поле обязательно для заполнения. Не указан год"
     public static CardInfo getExpiredYearCard() {
-        return new CardInfo("4444 4444 4444 4441", "12", "21", "IVAN PETROV", "321");
+        return new CardInfo("4444 4444 4444 4441", "12", "", "IVAN PETROV", "321");
     }
 
     // "Истёк срок действия карты. Больше года"
     public static CardInfo getExceedYearCard() {
-        return new CardInfo("4444 4444 4444 4441", "12", "23", "IVAN PETROV", "321");
+        return new CardInfo("4444 4444 4444 4441", "12", "20", "IVAN PETROV", "321");
     }
 
-    // "Не указан номер карты"
+    // "Поле обязательно для заполнения. Не указан номер карты"
     public static CardInfo getWithoutNumberCard() {
         return new CardInfo(" ", "12", "23", "IVAN PETROV", "321");
     }
@@ -58,7 +59,7 @@ public class Data {
         return new CardInfo("4444 4444 4444 4441", "13", "23", "IVAN PETROV", "321");
     }
 
-    // "Не заполнены данные карты"
+    // "Поле обязательно для заполнения. Не заполнены данные карты"
     public static CardInfo getEmptyFieldCard() {
         return new CardInfo("", "", "", "", "");
     }
@@ -75,7 +76,7 @@ public class Data {
 
     // "Не корректно заполнено поле CVC/CVV"
     public static CardInfo getNotValidCVCCard() {
-        return new CardInfo("4444 4444 4444 4441", "13", "23", "IVAN PETROV", "31");
+        return new CardInfo("4444 4444 4444 4441", "12", "23", "IVAN PETROV", "31");
     }
 
     @Value

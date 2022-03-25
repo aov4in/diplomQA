@@ -7,7 +7,7 @@ node_modules
 target
 *.ibt
 binlog.*
-.data_mysql/
+data_mysql
 *.log
 .allure/
 

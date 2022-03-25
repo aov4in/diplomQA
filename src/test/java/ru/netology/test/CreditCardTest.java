@@ -92,14 +92,14 @@ public class CreditCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Истёк срок действия карты. Не верно указан год"
+    // "Неверный формат. Не указан год"
     @Test
     @DisplayName("CreditCard. Invalid card expiration date. One year has expired. No entry in database")
     void shouldCreditCardInvalidDateYear() {
         val mainPage = new Page();
         val payment = mainPage.requestCredit();
         payment.fillForm(Data.getExpiredYearCard());
-        payment.notificationValidityErrorVisible();
+        payment.notificationRequiredFieldVisible();
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
@@ -110,11 +110,11 @@ public class CreditCardTest {
         val mainPage = new Page();
         val payment = mainPage.requestCredit();
         payment.fillForm(Data.getExceedYearCard());
-        payment.notificationValidityErrorVisible();
+        payment.notificationCardExpiredVisibleError();
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Не указан номер карты"
+    // "Поле обязательно для заполнения. Не указан номер карты"
     @Test
     @DisplayName("CreditCard. The card number field is not filled. Required field. No entry in database")
     void shouldCreditCardEmptyNumber() {
@@ -125,7 +125,7 @@ public class CreditCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Указан нулевой месяц"
+    // "Не верный формат. Указан нулевой месяц"
     @Test
     @DisplayName("CreditCard. Value \"00\" in the month field. Invalid format. No entry in database")
     void shouldCreditCardNullMonthValue() {
@@ -136,7 +136,7 @@ public class CreditCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Указан не корректный месяц"
+    // "Неверно указан срок действия карты. Указан не корректный месяц"
     @Test
     @DisplayName("CreditCard. Not a valid month value. Invalid format. No entry in database")
     void shouldCreditCardNotExistedMonth() {
@@ -147,7 +147,7 @@ public class CreditCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Не заполнены данные карты"
+    // "Поле обязательно для заполнения. Не заполнены данные карты"
     @Test
     @DisplayName("CreditCard. Purchase by credit card with empty fields. \"Invalid Format\" and \"Required Field\" Error Messages. No entry in database")
     void shouldCreditCardEmptyField() {
@@ -158,7 +158,7 @@ public class CreditCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Поле Владелец заполнено на русском"
+    // "Не верный формат. Поле Владелец заполнено на русском"
     @Test
     @DisplayName("CreditCard. Invalid format, the Owner field is filled in Cyrillic. No entry in database")
     void shouldCreditCardRusNameOwner() {
@@ -169,7 +169,7 @@ public class CreditCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Не корректно заполнено поле Владелец"
+    // "Не верный формат. Не корректно заполнено поле Владелец"
     @Test
     @DisplayName("CreditCard. The Owner field is filled with characters. Invalid format. No entry in database")
     void shouldCreditCardNotValidName() {
@@ -180,7 +180,7 @@ public class CreditCardTest {
         assertEquals("0", SqlUtils.getCreatedOrderStatus());
     }
 
-    // "Не корректно заполнено поле CVC/CVV"
+    // "Не верный формат. Не корректно заполнено поле CVC/CVV"
     @Test
     @DisplayName("CreditCard. Not valid CVC / CVV values, Invalid format. No entry in database")
     void shouldCreditCardNotValidCVC() {
@@ -199,7 +199,7 @@ public class CreditCardTest {
         val payment = mainPage.requestCredit();
         payment.fillForm(Data.getCardDateLessOneYear());
         payment.notificationCardExpiredVisibleError();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        assertEquals("1", SqlUtils.getCreatedOrderStatus());
     }
 
 }

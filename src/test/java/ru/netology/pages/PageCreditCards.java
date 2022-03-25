@@ -39,7 +39,7 @@ public class PageCreditCards {
         continueButton.click();
     }
     public void approvedOperationBank () {
-        approvedOperation.waitUntil(visible, 25000);
+        approvedOperation.waitUntil(visible, 10000);
         cancelSuccessField.click();
     }
     public void refusedOperationBank () {
@@ -55,7 +55,7 @@ public class PageCreditCards {
     }
 
     public void notificationCardExpiredVisibleError() {
-        cardExpiredError.waitUntil(visible, 10000);
+        cardExpiredError.waitUntil(visible,10000);
     }
 
     public void notificationRequiredFieldVisible() {
