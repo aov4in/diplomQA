@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/re977hbtuimitg3o?svg=true)](https://ci.appveyor.com/project/aov4in/diplomqa)
 ## Документы
 [План тестирования](/Documents/PLAN.md)
 
@@ -21,7 +22,7 @@
    При тестировании на postgres командой `java -jar ./artifacts/aqa-shop.jar --spring.profiles.active=postgres`
 
 6. В третьем окне терминала запустить тесты.
-   Для запуска на mysql командой `gradlew clean test -Ddb.url=jdbc:mysql://localhost:3306/app` (для windows) или `./gradlew test` (для линукс). Запуск на mysql установлен как дефолтный.
+   Для запуска на mysql командой `gradlew clean test -Ddb.url=jdbc:mysql://localhost:3306/app` (для windows) или `./gradlew clean test -Ddb.url=jdbc:mysql://localhost:3306/app` (для линукс).
    Для запуска на postgres командой `gradlew clean test -Ddb.url=jdbc:postgresql://localhost:5432/app` (для windows) или `./gradlew test -Ddb.url=jdbc:postgresql://localhost:5432/app` (для линукс).
 
 7. Дополнительно можно передать логин и пароль, добавив `-Duser=_user_` и `-Dpass=_pass_`, например `./gradlew test -Duser=_user_ -Dpass=_pass_`. Стандартные логин\пароль - **app\pass**.

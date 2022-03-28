@@ -198,7 +198,7 @@ public class CreditCardTest {
         val mainPage = new Page();
         val payment = mainPage.requestCredit();
         payment.fillForm(Data.getCardDateLessOneYear());
-        payment.notificationCardExpiredVisibleError();
+        payment.approvedOperationBank();
         assertEquals("1", SqlUtils.getCreatedOrderStatus());
     }
 

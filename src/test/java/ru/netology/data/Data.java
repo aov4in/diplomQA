@@ -46,7 +46,7 @@ public class Data {
 
     //"Срок действия карты менее одного года"
     public static CardInfo getCardDateLessOneYear() {
-        return new CardInfo("4444 4444 4444 4441", "12", "22", "IVAN PETROV", "321");
+        return new CardInfo("4444 4444 4444 4441", "07", "22", "IVAN PETROV", "321");
     }
 
     // "Указан нулевой месяц"

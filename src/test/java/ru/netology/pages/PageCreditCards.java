@@ -2,7 +2,6 @@ package ru.netology.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import ru.netology.data.Data;
 import ru.netology.data.Data.CardInfo;
 
 import static com.codeborne.selenide.Condition.*;
@@ -39,7 +38,7 @@ public class PageCreditCards {
         continueButton.click();
     }
     public void approvedOperationBank () {
-        approvedOperation.waitUntil(visible, 10000);
+        approvedOperation.waitUntil(visible, 25000);
         cancelSuccessField.click();
     }
     public void refusedOperationBank () {

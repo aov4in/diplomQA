@@ -63,7 +63,7 @@ public class DebitCardTest {
         val debitCard = mainPage.payWithDebitCard();
         debitCard.fillData(Data.getNotExistedCard());
         debitCard.refusedOperationBank();
-        assertEquals("0", SqlUtils.getCreatedOrderStatus());
+        assertEquals("3", SqlUtils.getCreatedOrderStatus());
     }
 
     // "Недействительная карта"
