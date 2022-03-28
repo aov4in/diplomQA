@@ -17,6 +17,7 @@ install:
   sudo java -jar ./artifacts/aqa-shop.jar --spring.profiles.active=mysql &
 
 build_script:
-  -
+  - docker-compose up -d
+  - java -jar ./artifacts/aqa-shop.jar --spring.profiles.active=mysql &
   - chmod +x gradlew
-  - ./gradlew test -Ddb.url=jdbc:mysql://localhost:3306/app -Dselenide.headless=true --info  # запускаем тест, флаг --info позволяет выводить больше информации
+  - ./gradlew test -Ddb.url=jdbc:mysql://localhost:3306/app -Dselenide.headless=true # запускаем тест, флаг --info позволяет выводить больше информации
