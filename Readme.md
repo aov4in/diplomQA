@@ -1,8 +1,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/re977hbtuimitg3o?svg=true)](https://ci.appveyor.com/project/aov4in/diplomqa)
 ## Документы
-[План тестирования](/Documents/Plan.md)
+[План тестирования](/documentation/Plan.md)
 
-[Отчет тестирования](/Documents/Report.md)
+[Отчет тестирования](/documentation/Report.md)
 
 ## Инструкция по запуску
 
