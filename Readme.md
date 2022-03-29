@@ -31,3 +31,13 @@
 10. Для включения Allure Report необходимо после первого теста ввести команду `gradlew allureReport`, после которой произойдет скачивание Allure.
 
 11. Для отображение самого отчёта ввести команду `gradlew allureServe` (после запуска второго и последующих тестов можно пропустить 10 пункт).
+
+## Сборка в Appveyor
+Для проведения CI в Appveyor:
+
+* Создаем файл .appveyor.yml в своем проекте
+* Заливаем изменения сделанные в проекте на GitHub
+* На сайте https://ci.appveyor.com авторизуемся и привязываем свой проект на GitHub к Appveyor
+* Запускаем сборку https://ci.appveyor.com
+* Т.к. есть падающие тесты, сборка проходит со статусом _failing_
+  [![Build status](https://ci.appveyor.com/api/projects/status/re977hbtuimitg3o?svg=true)](https://ci.appveyor.com/project/aov4in/diplomqa)
